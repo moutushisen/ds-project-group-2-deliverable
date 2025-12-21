@@ -150,7 +150,7 @@ python model.py -m Meteo_csv -r Rivers_csv -s 0
 
 ## 🎓 Course Context
 
-This repository accompanies the project report for the **Data Science** course at **Uppsala University**.
+This repository accompanies the project report for the **Project in Data Science** course at **Uppsala University**.
 
 **Authors:** Alberto Fernández Comesaña,  Henrik Jonasson, Moutushi Sen
 
