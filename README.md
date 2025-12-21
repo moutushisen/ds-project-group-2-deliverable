@@ -1,3 +1,4 @@
+```markdown
 # Predicting Inter-Basin Exchange in Lake Mälaren
 ### Data Science Project – Group 2
 
@@ -31,3 +32,57 @@ The project predicts inter-basin water exchange in Lake Mälaren using data-driv
 ├── xgboost_C.R             # XGBoost implementation (Interface C)
 │
 └── README.md
+
+
+
+## 📊 Data & Methods
+
+* **Target:** Weekly inter-basin flows derived from a hydrodynamic model (2000–2024).
+* **Features:** River inflow and meteorological data (weekly averages).
+* **Models Evaluated:**
+* **Linear Regression** (Final selected model)
+* Decision Trees, Neural Networks, and XGBoost (Comparative analysis)
+
+
+* **Evaluation:** Ordered 80/20 train–test split to respect temporal dependency; performance measured via ** score**.
+
+## 🚀 How to Run (Python)
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+
+
+### 2. Train and evaluate
+
+Run the main pipeline to train models for all interfaces (A, B, and C):
+
+```bash
+python model.py -d Rivers_csv -m Meteo_csv -s 0.8 -i A,B,C
+
+
+### 3. Predict using a trained model
+
+```bash
+python model.py -m Meteo_csv -r Rivers_csv -s 0
+
+
+## 📈 Outputs
+
+* **Trained models:** Saved in `models/`
+* **Evaluation & prediction plots:** Generated in `figures/`
+* **Prediction CSVs:** Exported to `predictions/`
+
+## 💡 Key Result
+
+**Linear Regression** provided the best balance between prediction performance and interpretability. It effectively captured the variance in inter-basin exchange while remaining computationally efficient, outperforming more complex models given the current data constraints.
+
+
+### Course Context
+
+* **University:** Uppsala University
+* **Course:** Data Science
+* **Authors:** Moutushi Sen, Henrik Jonasson
+* **License:** Academic use only.
+
