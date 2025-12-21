@@ -1,3 +1,7 @@
+This is the formatted **README.md** file, ready to be copied and pasted directly into your GitHub repository. I have applied standard Markdown styling to ensure it looks professional and is easy for instructors to navigate.
+
+---
+
 ```markdown
 # Predicting Inter-Basin Exchange in Lake Mälaren
 ### Data Science Project – Group 2
@@ -33,7 +37,7 @@ The project predicts inter-basin water exchange in Lake Mälaren using data-driv
 │
 └── README.md
 
-
+```
 
 ## 📊 Data & Methods
 
@@ -53,6 +57,7 @@ The project predicts inter-basin water exchange in Lake Mälaren using data-driv
 ```bash
 pip install -r requirements.txt
 
+```
 
 ### 2. Train and evaluate
 
@@ -61,12 +66,14 @@ Run the main pipeline to train models for all interfaces (A, B, and C):
 ```bash
 python model.py -d Rivers_csv -m Meteo_csv -s 0.8 -i A,B,C
 
+```
 
 ### 3. Predict using a trained model
 
 ```bash
 python model.py -m Meteo_csv -r Rivers_csv -s 0
 
+```
 
 ## 📈 Outputs
 
@@ -78,6 +85,7 @@ python model.py -m Meteo_csv -r Rivers_csv -s 0
 
 **Linear Regression** provided the best balance between prediction performance and interpretability. It effectively captured the variance in inter-basin exchange while remaining computationally efficient, outperforming more complex models given the current data constraints.
 
+---
 
 ### Course Context
 
@@ -86,3 +94,13 @@ python model.py -m Meteo_csv -r Rivers_csv -s 0
 * **Authors:** Moutushi Sen, Henrik Jonasson
 * **License:** Academic use only.
 
+```
+
+---
+
+### Would you like me to:
+* **Draft a brief "Project Summary"** or "Final Conclusions" paragraph to add to the bottom?
+* **Create a `requirements.txt` template** based on the libraries you used (e.g., pandas, scikit-learn)?
+* **Help you write a `CONTRIBUTING.md`** file if you plan on having others collaborate?
+
+```
