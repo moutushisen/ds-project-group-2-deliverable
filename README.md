@@ -1,15 +1,5 @@
 ---
 
-# Predicting Inter-Basin Exchange in Lake Mälaren
-
-**Data Science Project – Group 2**
-
-This repository contains the code and data used for the **Data Science course project** on **predicting inter-basin water exchange in Lake Mälaren** using **data-driven models**.
-
-The project is part of the **MEWS (Managing Events and Extremes in Water Supplies)** initiative and aims to provide a **faster and more interpretable alternative** to computationally expensive hydrodynamic simulations.
-
----
-
 ## Project Motivation
 
 Lake Mälaren is Sweden’s third-largest lake and provides drinking water for over **2 million people**.
