@@ -1,33 +1,42 @@
 ---
 
-## Project Motivation
+# Predicting Inter-Basin Exchange in Lake Mälaren
 
-Lake Mälaren is Sweden’s third-largest lake and provides drinking water for over **2 million people**.
-Understanding **how water flows between different basins** is critical, as some basins receive polluted inflows while others serve as drinking water reservoirs.
+**Data Science Project – Group 2**
 
-Although a **physics-based hydrodynamic model** exists, it is:
+This repository contains the code and data used for the **Data Science course project** on **predicting inter-basin water exchange in Lake Mälaren** using **data-driven models**.
 
-* Computationally expensive
-* Difficult to interpret in terms of driving factors
-
-This project instead applies **statistical and machine-learning models** to:
-
-* Predict flow across selected basin interfaces
-* Identify the influence of **river inflow** and **meteorological conditions**
-* Enable faster and more interpretable analysis
+The project is part of the broader **MEWS (Managing Events and Extremes in Water Supplies)** initiative and aims to provide a **faster and more interpretable alternative** to computationally expensive hydrodynamic simulations.
 
 ---
 
-## Objectives
+## 🌊 Project Motivation
 
-* Predict discharge across **selected interfaces (A, B, C)**
-* Use **river inflow** and **meteorological data** as predictors
-* Compare interpretable models with more complex approaches
-* Preserve **time-series structure** and reproducibility
+Lake Mälaren is Sweden’s third-largest lake and provides drinking water for over **2 million people**. Understanding **how water flows between different basins** is crucial, as some basins receive polluted inflows while others serve as drinking water reservoirs.
+
+While a **physics-based hydrodynamic model** exists, it is:
+
+* Computationally expensive to run.
+* Difficult to interpret in terms of specific driving factors.
+
+This project utilizes **statistical and machine-learning models** to:
+
+* Predict flow across selected basin interfaces.
+* Identify how **river inflow** and **meteorological conditions** influence transport.
+* Enable faster, real-time-capable, and more interpretable analysis.
 
 ---
 
-## Repository Structure
+## 🎯 Objectives
+
+* **Predict discharge** across selected interfaces (**A, B, and C**) between lake basins.
+* **Feature Engineering:** Use river inflow and meteorological data as primary input features.
+* **Model Comparison:** Compare interpretable models (Linear Regression, Decision Trees) against complex models (Neural Networks, XGBoost).
+* **Reproducibility:** Preserve time-series structure and ensure a fully automated pipeline.
+
+---
+
+## 📂 Repository Structure
 
 ```text
 .
@@ -51,147 +60,117 @@ This project instead applies **statistical and machine-learning models** to:
 ├── xgboost_C.R             # XGBoost model (interface C)
 │
 ├── time_series_model.R     # Time-series baseline models
-├── meteo_average.R        # Meteorological data aggregation
-├── river_average.R        # River inflow aggregation
-├── flow_at_interface.R    # Flow extraction at basin interfaces
-├── flow_at_coordinate.R   # Flow extraction at spatial coordinates
-├── flux_interface.R       # Flux calculations across interfaces
+├── meteo_average.R         # Meteorological data aggregation
+├── river_average.R         # River inflow aggregation
+├── flow_at_interface.R     # Flow extraction at basin interfaces
+├── flow_at_coordinate.R    # Flow extraction at spatial coordinates
+├── flux_interface.R        # Flux calculations across interfaces
 │
 └── README.md
+
 ```
 
 ---
 
-## Data Description
+## 📊 Data Description
 
 ### Hydrodynamic Target Data
 
-* Generated from a **physics-based hydrodynamic model**
-* Weekly averages from **2000–2024**
-* Flow extracted across **9 interfaces**, grouped into **A, B, and C**
+* Generated from a physics-based hydrodynamic model.
+* Weekly averages from **2000–2024**.
+* Flow extracted across **9 interfaces** grouped into **A, B, and C**.
 
 ### Meteorological Data (`Meteo_csv/`)
 
-* Wind speed, wind direction, precipitation, temperature
-* Aggregated to **weekly resolution**
-* A `month` feature is automatically extracted to model seasonality
+* Variables: Wind speed, wind direction, precipitation, temperature.
+* Aggregated to **weekly resolution**.
+* A `month` feature is extracted to account for seasonality.
 
 ### River Inflow Data (`Rivers_csv/`)
 
-* Daily inflow data aggregated to weekly values
-* Captures basin-specific hydrological forcing
+* Daily inflow data aggregated to weekly values.
+* Used to capture basin-specific hydrological forcing.
 
 ---
 
-## Modeling Approach
+## 🧠 Modeling Approach
 
-* **Linear Regression** (final selected model)
-* **Decision Trees** (interpretable comparison)
-* **Neural Networks** (performance comparison)
-* **XGBoost** (R-based comparison)
+We evaluated several approaches to find the optimal balance between accuracy and transparency:
 
-Key design choices:
+* **Linear Regression** (Final selected model)
+* **Decision Trees** (Interpretable comparison)
+* **Neural Networks** (Performance benchmark)
+* **XGBoost** (R-based gradient boosting comparison)
 
-* Ordered **80/20 train–test split** (no shuffling)
-* Multi-output regression for multiple interfaces
-* Lagged precipitation features
-* Focus on **interpretability vs. performance trade-off**
+**Key Design Choices:**
+
+* **Ordered 80/20 train–test split:** Preserves temporal order (no shuffling).
+* **Multi-output regression:** Handles multiple interfaces simultaneously.
+* **Lagged features:** Incorporates delayed effects of precipitation.
 
 ---
 
-## Python Pipeline Usage
+## 🚀 Python Pipeline Usage
 
-### Installation
+### 1. Installation
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
-### Training and Evaluation
+### 2. Training and Evaluation
+
+Run the main pipeline to train the model on available data and generate evaluation metrics:
 
 ```bash
-python model.py \
-  -d Rivers_csv \
-  -m Meteo_csv \
-  -s 0.8 \
-  -i A,B,C
+python model.py -d Rivers_csv -m Meteo_csv -s 0.8 -i A,B,C
+
 ```
 
-This will:
+* Trains a linear regression model.
+* Evaluates on held-out test data.
+* Saves models, predictions, and figures automatically.
 
-* Train a linear regression model
-* Evaluate it on held-out test data
-* Save models, predictions, and figures automatically
+### 3. Prediction Only
 
-### Prediction Only
+Use a previously trained model to generate new predictions:
 
 ```bash
-python model.py \
-  -m Meteo_csv \
-  -r Rivers_csv \
-  -s 0
-```
+python model.py -m Meteo_csv -r Rivers_csv -s 0
 
-Uses a previously trained model to generate predictions.
-
----
-
-## Outputs
-
-### Models
-
-```text
-models/
-└── linear_regression/
-    ├── linear_regression.joblib
-    └── colnames.txt
-```
-
-### Figures
-
-```text
-figures/
-├── linear_regression_evaluation.png
-└── linear_regression_prediction.png
-```
-
-### Predictions
-
-```text
-predictions/
-└── linear_regression_predictions.csv
 ```
 
 ---
 
-## Results Summary
+## 📈 Outputs
 
-* **Linear regression** achieved the best balance between performance and interpretability
-* River inflow is the strongest predictor of inter-basin exchange
-* Meteorological variables provide additional explanatory power
-* More complex models did not outperform linear regression, given the dataset size
-
----
-
-## Reproducibility
-
-* All scripts are deterministic
-* No manual steps required after configuration
-* File-based inputs and outputs ensure traceability
+* **Models:** Saved in `models/linear_regression/` as `.joblib` files.
+* **Figures:** Evaluation and prediction plots saved in `figures/`.
+* **Predictions:** Raw output data saved in `predictions/linear_regression_predictions.csv`.
 
 ---
 
-## Course Context
+## ✨ Results Summary
 
-This repository accompanies the project report:
-
-**“Predicting Inter-Basin Exchange in Lake Mälaren”**
-Uppsala University – Data Science
-Authors: *Alberto Fernández Comesaña,Henrik Jonasson,Moutushi Sen*
+* **Linear Regression** achieved the best balance between performance and interpretability.
+* **River inflow** was identified as the strongest predictor of inter-basin exchange.
+* **Meteorological variables** provided significant secondary explanatory power.
+* More complex models did not significantly outperform linear regression, likely due to the dataset size and the underlying physics of the system.
 
 ---
 
-## License
+## 🎓 Course Context
+
+This repository accompanies the project report for the **Data Science** course at **Uppsala University**.
+
+**Authors:** Alberto Fernández Comesaña,  Henrik Jonasson, Moutushi Sen
+
+**Project:** *Predicting Inter-Basin Exchange in Lake Mälaren*
+
+---
+
+## 📜 License
 
 For academic and educational use only.
 
