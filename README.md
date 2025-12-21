@@ -1,106 +1,209 @@
-This is the formatted **README.md** file, ready to be copied and pasted directly into your GitHub repository. I have applied standard Markdown styling to ensure it looks professional and is easy for instructors to navigate.
+---
+
+# Predicting Inter-Basin Exchange in Lake Mälaren
+
+**Data Science Project – Group 2**
+
+This repository contains the code and data used for the **Data Science course project** on **predicting inter-basin water exchange in Lake Mälaren** using **data-driven models**.
+
+The project is part of the **MEWS (Managing Events and Extremes in Water Supplies)** initiative and aims to provide a **faster and more interpretable alternative** to computationally expensive hydrodynamic simulations.
 
 ---
 
-```markdown
-# Predicting Inter-Basin Exchange in Lake Mälaren
-### Data Science Project – Group 2
+## Project Motivation
 
-This repository contains the final deliverable for the **Data Science** course project at **Uppsala University**.
+Lake Mälaren is Sweden’s third-largest lake and provides drinking water for over **2 million people**.
+Understanding **how water flows between different basins** is critical, as some basins receive polluted inflows while others serve as drinking water reservoirs.
 
-The project predicts inter-basin water exchange in Lake Mälaren using data-driven models based on river inflow and meteorological data. The goal is to provide a faster and more interpretable alternative to physics-based hydrodynamic simulations used in the **MEWS** (Managing Events and Extremes in Water Supplies) project.
+Although a **physics-based hydrodynamic model** exists, it is:
 
-## 🎯 Objectives
-* **Predict discharge** across basin interfaces A, B, and C.
-* **Utilize multivariate inputs**, including river inflow and meteorological variables.
-* **Compare model performance** between interpretable linear models and complex non-linear methods.
-* **Ensure reproducibility** through a structured pipeline and preserved time-series data.
+* Computationally expensive
+* Difficult to interpret in terms of driving factors
 
-## 📁 Repository Structure
+This project instead applies **statistical and machine-learning models** to:
+
+* Predict flow across selected basin interfaces
+* Identify the influence of **river inflow** and **meteorological conditions**
+* Enable faster and more interpretable analysis
+
+---
+
+## Objectives
+
+* Predict discharge across **selected interfaces (A, B, C)**
+* Use **river inflow** and **meteorological data** as predictors
+* Compare interpretable models with more complex approaches
+* Preserve **time-series structure** and reproducibility
+
+---
+
+## Repository Structure
+
 ```text
 .
-├── Meteo_csv/              # Meteorological input data
-├── Rivers_csv/             # River inflow data
-├── Rivers_csv_old/         # Older / unused data
-├── Python_csv/             # Intermediate processed CSVs
+├── Meteo_csv/              # Meteorological input data (CSV)
+├── Rivers_csv/             # River inflow input data (CSV)
+├── Rivers_csv_old/         # Older / unused river CSV files
+├── Python_csv/             # Intermediate CSVs used by Python models
 │
-├── model.py                # Main Python pipeline (Command Line Interface)
+├── model.py                # Main command-line entry point
 ├── _model.py               # Training, evaluation, and prediction logic
-├── utils.py                # Data preprocessing and cleaning
-├── const.py                # File paths and constants
+├── utils.py                # Data loading and preprocessing
+├── const.py                # Global constants (paths, filenames)
 ├── requirements.txt        # Python dependencies
 │
-├── linear_regression_*.R   # Interface-specific R models
-├── decision_tree_A.py      # Decision tree implementation (Interface A)
-├── neural_network_A.py     # Neural network implementation (Interface A)
-├── xgboost_C.R             # XGBoost implementation (Interface C)
+├── decision_tree_A.py      # Decision tree model (interface A)
+├── neural_network_A.py     # Neural network model (interface A)
+│
+├── linear_regression_A.R   # Linear regression model (interface A)
+├── linear_regression_B.R   # Linear regression model (interface B)
+├── linear_regression_C.R   # Linear regression model (interface C)
+├── xgboost_C.R             # XGBoost model (interface C)
+│
+├── time_series_model.R     # Time-series baseline models
+├── meteo_average.R        # Meteorological data aggregation
+├── river_average.R        # River inflow aggregation
+├── flow_at_interface.R    # Flow extraction at basin interfaces
+├── flow_at_coordinate.R   # Flow extraction at spatial coordinates
+├── flux_interface.R       # Flux calculations across interfaces
 │
 └── README.md
-
 ```
 
-## 📊 Data & Methods
+---
 
-* **Target:** Weekly inter-basin flows derived from a hydrodynamic model (2000–2024).
-* **Features:** River inflow and meteorological data (weekly averages).
-* **Models Evaluated:**
-* **Linear Regression** (Final selected model)
-* Decision Trees, Neural Networks, and XGBoost (Comparative analysis)
+## Data Description
 
+### Hydrodynamic Target Data
 
-* **Evaluation:** Ordered 80/20 train–test split to respect temporal dependency; performance measured via ** score**.
+* Generated from a **physics-based hydrodynamic model**
+* Weekly averages from **2000–2024**
+* Flow extracted across **9 interfaces**, grouped into **A, B, and C**
 
-## 🚀 How to Run (Python)
+### Meteorological Data (`Meteo_csv/`)
 
-### 1. Install dependencies
+* Wind speed, wind direction, precipitation, temperature
+* Aggregated to **weekly resolution**
+* A `month` feature is automatically extracted to model seasonality
+
+### River Inflow Data (`Rivers_csv/`)
+
+* Daily inflow data aggregated to weekly values
+* Captures basin-specific hydrological forcing
+
+---
+
+## Modeling Approach
+
+* **Linear Regression** (final selected model)
+* **Decision Trees** (interpretable comparison)
+* **Neural Networks** (performance comparison)
+* **XGBoost** (R-based comparison)
+
+Key design choices:
+
+* Ordered **80/20 train–test split** (no shuffling)
+* Multi-output regression for multiple interfaces
+* Lagged precipitation features
+* Focus on **interpretability vs. performance trade-off**
+
+---
+
+## Python Pipeline Usage
+
+### Installation
 
 ```bash
 pip install -r requirements.txt
-
 ```
 
-### 2. Train and evaluate
-
-Run the main pipeline to train models for all interfaces (A, B, and C):
+### Training and Evaluation
 
 ```bash
-python model.py -d Rivers_csv -m Meteo_csv -s 0.8 -i A,B,C
-
+python model.py \
+  -d Rivers_csv \
+  -m Meteo_csv \
+  -s 0.8 \
+  -i A,B,C
 ```
 
-### 3. Predict using a trained model
+This will:
+
+* Train a linear regression model
+* Evaluate it on held-out test data
+* Save models, predictions, and figures automatically
+
+### Prediction Only
 
 ```bash
-python model.py -m Meteo_csv -r Rivers_csv -s 0
-
+python model.py \
+  -m Meteo_csv \
+  -r Rivers_csv \
+  -s 0
 ```
 
-## 📈 Outputs
-
-* **Trained models:** Saved in `models/`
-* **Evaluation & prediction plots:** Generated in `figures/`
-* **Prediction CSVs:** Exported to `predictions/`
-
-## 💡 Key Result
-
-**Linear Regression** provided the best balance between prediction performance and interpretability. It effectively captured the variance in inter-basin exchange while remaining computationally efficient, outperforming more complex models given the current data constraints.
+Uses a previously trained model to generate predictions.
 
 ---
 
-### Course Context
+## Outputs
 
-* **University:** Uppsala University
-* **Course:** Data Science
-* **Authors:** Moutushi Sen, Henrik Jonasson
-* **License:** Academic use only.
+### Models
 
+```text
+models/
+└── linear_regression/
+    ├── linear_regression.joblib
+    └── colnames.txt
+```
+
+### Figures
+
+```text
+figures/
+├── linear_regression_evaluation.png
+└── linear_regression_prediction.png
+```
+
+### Predictions
+
+```text
+predictions/
+└── linear_regression_predictions.csv
 ```
 
 ---
 
-### Would you like me to:
-* **Draft a brief "Project Summary"** or "Final Conclusions" paragraph to add to the bottom?
-* **Create a `requirements.txt` template** based on the libraries you used (e.g., pandas, scikit-learn)?
-* **Help you write a `CONTRIBUTING.md`** file if you plan on having others collaborate?
+## Results Summary
 
-```
+* **Linear regression** achieved the best balance between performance and interpretability
+* River inflow is the strongest predictor of inter-basin exchange
+* Meteorological variables provide additional explanatory power
+* More complex models did not outperform linear regression, given the dataset size
+
+---
+
+## Reproducibility
+
+* All scripts are deterministic
+* No manual steps required after configuration
+* File-based inputs and outputs ensure traceability
+
+---
+
+## Course Context
+
+This repository accompanies the project report:
+
+**“Predicting Inter-Basin Exchange in Lake Mälaren”**
+Uppsala University – Data Science
+Authors: *Alberto Fernández Comesaña,Henrik Jonasson,Moutushi Sen*
+
+---
+
+## License
+
+For academic and educational use only.
+
+---
+
