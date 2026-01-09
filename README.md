@@ -34,18 +34,14 @@ This project utilizes **statistical and machine-learning models** to:
 ├── Python_csv/             # Intermediate CSVs used by Python models
 │
 ├── model.py                # Main command-line entry point
-├── _model.py               # Training, evaluation, and prediction logic
+├── model.py                # Training, evaluation, and prediction logic
 ├── utils.py                # Data loading and preprocessing
 ├── const.py                # Global constants (paths, filenames)
 ├── requirements.txt        # Python dependencies
 │
-├── decision_tree_A.py      # Decision tree model (interface A)
-├── neural_network_A.py     # Neural network model (interface A)
-│
 ├── linear_regression_A.R   # Linear regression model (interface A)
 ├── linear_regression_B.R   # Linear regression model (interface B)
 ├── linear_regression_C.R   # Linear regression model (interface C)
-├── xgboost_C.R             # XGBoost model (interface C)
 │
 ├── time_series_model.R     # Time-series baseline models
 ├── meteo_average.R         # Meteorological data aggregation
